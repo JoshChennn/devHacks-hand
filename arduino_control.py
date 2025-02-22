@@ -20,23 +20,6 @@ for i in range(2, 12):
 def rotateServo(servo, angle):
     board.digital[servo].write(angle)
 
-while True:
-    rotateServo(indexFlex, 90)
-    rotateServo(middleFlex, 90)
-    rotateServo(ringFlex, 90)
-    rotateServo(pinkyFlex, 90)
-    rotateServo(thumbFlex, 90)
-    rotateServo(thumbRotate, 90)
-    sleep(0.2)
-    rotateServo(indexFlex, 0)
-    sleep(0.2)
-    rotateServo(middleFlex, 0)
-    sleep(0.2)
-    rotateServo(ringFlex, 0)
-    sleep(0.2)
-    rotateServo(pinkyFlex, 0)
-    sleep(0.2)
-    rotateServo(thumbFlex, 0)
-    sleep(0.2)
-    rotateServo(thumbRotate, 0)
-    sleep(2)
+for i in range(10):
+    rotateServo(i+2,0)
+    sleep(1)

@@ -21,5 +21,8 @@ def rotateServo(servo, angle):
     board.digital[servo].write(angle)
 
 for i in range(10):
-    rotateServo(i+2,0)
+    rotateServo(i+2,30)
+    sleep(1)
+for i in range(10):
+    rotateServo(i+2,30)
     sleep(1)

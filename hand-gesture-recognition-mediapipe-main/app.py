@@ -50,7 +50,7 @@ def get_args():
     parser.add_argument("--min_tracking_confidence",
                         help='min_tracking_confidence',
                         type=int,
-                        default=0.8)
+                        default=0.7)
 
     args = parser.parse_args()
 
@@ -96,9 +96,7 @@ def main():
     # FPS Measurement ########################################################
     cvFpsCalc = CvFpsCalc(buffer_len=10)
 
-
     angles = [45]*10
-    last_angles = [45]*10
 
     while True:
         fps = cvFpsCalc.get()
@@ -144,7 +142,6 @@ def main():
                 # Write to the dataset file
                 logging_csv(number, pre_processed_landmark_list)
                 
-                last_angles = copy.deepcopy(angles)
                 angles = []
                 for i in range(5):
                     fingerPos = [[0 for j in range(3)] for i in range(21)]
@@ -158,22 +155,30 @@ def main():
                         new_angleIn = angle_2p_3d(fingerPos[i*4+3],pre_proc_list_3d[i*12+6:i*12+9],pre_proc_list_3d[0:3])
                         new_angleOut = angle_2p_3d(fingerPos[i*4+4],fingerPos[i*4+3],pre_proc_list_3d[i*12+6:i*12+9])
                         angles.append(new_angleIn)
-                        # print(f'Angle {i}: '+str(new_angleIn))
                         angles.append(new_angleOut)
-                        # print(f'Angle {i}: '+str(new_angleOut))
                     else:
                         new_angleIn = angle_2p_3d(fingerPos[i*4+2],pre_proc_list_3d[i*12+3:i*12+6],pre_proc_list_3d[0:3])
                         new_angleOut = angle_2p_3d(fingerPos[i*4+3],fingerPos[i*4+2],pre_proc_list_3d[i*12+3:i*12+6])
                         angles.append(new_angleIn)
-                        # print(f'Angle {i}: '+str(new_angleIn))
                         angles.append(new_angleOut)
-                        # print(f'Angle {i}: '+str(new_angleOut))
                         
 
+                print(angles)
+                #setServo(2, clamp(0,90,map_val(20,90,180,0, 180 - angles[0])))
+                #setServo(3, clamp(0,90,map_val(20,90,0,90, 180 - angles[1] - angles[0])))
+
+                setServo(4, clamp(0,180,map_val(20,80,0,180,180 - angles[4])))
+                setServo(5, clamp(130,180,map_val(20,100,180,0, 300 - angles[5]- angles[4])))
+
+                setServo(9, clamp(0,180,map_val(20,80,0,180,180 - angles[6])))
+                setServo(7, clamp(130,180,map_val(20,100,180,0, 300 - angles[7]- angles[6])))
+
+                setServo(6, clamp(0,180,map_val(30,80,0,180,180 - angles[8])))
+                setServo(8, clamp(90,180,map_val(20,100,180,0, 300 - angles[9]- angles[8])))
+                
+                setServo(11, clamp(0,180,map_val(20,90,0,90, 180 - angles[0])))
+                
                 # print(angles)
-                for i in range(5):
-                    setServo(i*2, clamp())
-                    setServo(11, clamp(0,90,map_val(20,90,0,90, 180 - angles[0])))
                 
                 if calc_once == 0:
                     for i in range(5):

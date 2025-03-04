@@ -18,16 +18,6 @@ from pyfirmata2 import Arduino, SERVO
 
 board = Arduino(Arduino.AUTODETECT)
 
-indexFlex = 2
-indexExtend = 3
-middleFlex = 4
-middleExtend = 5
-ringFlex = 6
-ringExtend = 7
-pinkyFlex = 8
-pinkyExtend = 9
-thumbFlex = 10
-thumbRotate = 11
 
 for i in range(2, 12):
     board.digital[i].mode = SERVO
@@ -161,24 +151,28 @@ def main():
                         new_angleOut = angle_2p_3d(fingerPos[i*4+3],fingerPos[i*4+2],pre_proc_list_3d[i*12+3:i*12+6])
                         angles.append(new_angleIn)
                         angles.append(new_angleOut)
-                        
 
-                print(angles)
-                #setServo(2, clamp(0,90,map_val(20,90,180,0, 180 - angles[0])))
-                #setServo(3, clamp(0,90,map_val(20,90,0,90, 180 - angles[1] - angles[0])))
-
-                setServo(4, clamp(0,180,map_val(20,80,0,180,180 - angles[4])))
-                setServo(5, clamp(130,180,map_val(20,100,180,0, 300 - angles[5]- angles[4])))
-
-                setServo(9, clamp(0,180,map_val(20,80,0,180,180 - angles[6])))
-                setServo(7, clamp(130,180,map_val(20,100,180,0, 300 - angles[7]- angles[6])))
-
-                setServo(6, clamp(0,180,map_val(30,80,0,180,180 - angles[8])))
-                setServo(8, clamp(90,180,map_val(20,100,180,0, 300 - angles[9]- angles[8])))
-                
-                setServo(11, clamp(0,180,map_val(20,90,0,90, 180 - angles[0])))
-                
                 # print(angles)
+                indexExtend = clamp(0,190,map_val(20,90,200,-40, 180 - angles[2]))
+                indexFlex = clamp(0,190,map_val(40,170,-20,210, 360 - angles[3]- angles[2]))
+                setServo(2, indexExtend)
+                setServo(4, indexFlex)
+
+                middleExtend = clamp(0,190,map_val(20,70,180,-30, 180 - angles[4]))
+                middleFlex = clamp(0,190,map_val(20,100,180,-50, 300 - angles[5]- angles[4]))
+                setServo(5, middleExtend)
+                setServo(7, middleFlex)
+
+                ringExtend = clamp(0,300,map_val(20,80,0,300,180 - angles[6]))
+                ringFlex = clamp(0,190,map_val(20,100,200,-20, 300 - angles[7]- angles[6]))
+                setServo(3, ringExtend)
+                setServo(9, ringFlex)
+
+                setServo(6, clamp(0,190,map_val(40,90,-10,180,180 - angles[8])))
+                setServo(8, clamp(0,190,map_val(20,100,200,-40, 300 - angles[9]- angles[8])))
+                
+                setServo(10, clamp(0,190,map_val(20,80,-10,220,180 - angles[1])))
+                setServo(11, clamp(0,180,map_val(20,90,0,90, 180 - angles[0])))
                 
                 if calc_once == 0:
                     for i in range(5):
